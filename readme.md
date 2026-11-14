@@ -1,332 +1,161 @@
-[![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/) [![CI Pipeline](https://github.com/nim444/mcp-android-server-python/actions/workflows/ci.yml/badge.svg?branch=main&label=CI%20Pipeline)](https://github.com/nim444/mcp-android-server-python/actions/workflows/ci.yml) [![Coverage: 90%](https://img.shields.io/badge/Coverage-90%25-brightgreen.svg)](https://codecov.io/gh/nim444/sdet-django-api) [![Code style: ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+MCP Android Agent
 
-# MCP Android Agent
+!Python 3.13 !MCP !License: MIT
 
-This project provides an **MCP (Model Context Protocol)** server for automating Android devices using [uiautomator2](https://github.com/openatx/uiautomator2). It's designed to be easily plugged into AI agents like GitHub Copilot Chat, Claude, or Open Interpreter to control Android devices through natural language.
+MCP Android Agent 是一个基于 Python、MCP（Model Context Protocol）和 uiautomator2 开发的 Android 自动化控制服务器。
 
-## Modular Architecture
+通过 MCP 协议，可以将 Android 手机或模拟器接入 AI Agent，例如 Claude Desktop、GitHub Copilot 和 VS Code Agent，实现通过自然语言控制 Android 设备。
 
-The server has been refactored into a clean, modular architecture with tools organized by functionality:
-
-```
+✨ 核心功能
+1. 设备管理
+自动检测和连接 Android 设备
+获取设备型号、Android 版本及屏幕分辨率
+获取电池状态和设备信息
+检查 ADB 连接状态
+2. 应用管理
+获取已安装应用列表
+启动、停止和强制关闭应用
+获取当前前台应用信息
+清除应用数据和缓存
+3. 屏幕控制
+打开和关闭屏幕
+自动解锁设备
+等待屏幕状态变化
+4. 自动化操作
+点击指定文本或 UI 元素
+长按、滑动和拖动
+自动输入文本
+模拟 Home、Back、Menu 等硬件按键
+5. UI 检查与调试
+获取 UI 元素详细信息
+导出完整 UI 层级 XML
+获取设备截图
+等待指定元素出现
+自动滚动查找目标元素
+6. 高级功能
+获取 Android Toast 消息
+等待指定 Activity 启动
+支持异步操作
+🏗️ 项目架构
+text
 mcp-android-server-python/
-├── server.py                    # Main server (61 lines - clean & focused)
-├── server_original_backup.py    # Backup of original monolithic version
-└── tools/                       # 🆕 Modular tools package
-    ├── __init__.py             # Central registration & imports
-    ├── device_tools.py         # Device connection & status tools
-    ├── app_tools.py            # Application management tools
-    ├── screen_tools.py         # Screen control & unlock tools
-    ├── input_tools.py          # User input simulation (click, swipe, text)
-    ├── inspection_tools.py     # UI inspection & screenshots
-    └── advanced_tools.py       # Advanced features (toast, activity wait)
-```
+│
+├── server.py
+├── server_original_backup.py
+│
+└── tools/
+    ├── __init__.py
+    ├── device_tools.py
+    ├── app_tools.py
+    ├── screen_tools.py
+    ├── input_tools.py
+    ├── inspection_tools.py
+    └── advanced_tools.py
 
-### Benefits of Modular Architecture
 
-- **Maintainability**: Easy to add/modify/remove tools without touching main server
-- **Organization**: Tools grouped logically by functionality
-- **Testing**: Individual tool modules can be unit tested separately
-- **Reusability**: Tool modules can be reused in other projects
-- **Scalability**: New tool categories can be added as separate modules
-- **Clean Code**: Main server reduced from 1321 lines to 61 lines
+采用模块化设计，将不同功能独立管理，方便维护、测试和扩展。
 
-## Quick Demo
-
-![Demo](.docs/demo.gif)
-
-----
-
-![Demo](.docs/amazon.gif)
-
-## Requirements
-
-- Python 3.13 or higher
-- Android Debug Bridge (adb) installed and in PATH
-- Connected Android device with USB debugging enabled
-- [uiautomator2](https://github.com/openatx/uiautomator2) compatible Android device
-
-## Features
-
-### Device Management
-- **Smart Device Detection**: Automatically finds and connects to available devices
-- **Comprehensive Device Info**: Get serial, resolution, battery, WiFi IP, Android version
-- **ADB Diagnostics**: Check ADB availability and connection status
-- **Health Monitoring**: Built-in server health checks
-
-### Application Management
-- **App Discovery**: List all installed applications (system + user apps)
-- **App Lifecycle Control**: Start, stop, force-stop apps by package name
-- **App State Monitoring**: Track current foreground app and activity
-- **Data Management**: Clear app data/cache for testing
-
-### Screen & Display Control
-- **Screen Power Management**: Turn screen on/off programmatically
-- **Smart Unlock**: Automatic screen unlocking with standard methods
-- **Screen State Monitoring**: Wait for screen activation (async support)
-
-### User Input Simulation
-- **Precision Interactions**: Click by text, resource ID, or content description
-- **Advanced Gestures**: Long click, swipe, drag operations
-- **Text Input**: Smart text entry with optional field clearing
-- **Hardware Keys**: Simulate home, back, menu, volume keys
-
-### UI Inspection & Debugging
-- **Element Analysis**: Get detailed UI element properties and bounds
-- **Screen Capture**: Take screenshots for debugging and documentation
-- **UI Hierarchy**: Export complete screen structure as XML
-- **Smart Waiting**: Wait for elements to appear with custom timeouts
-- **Scroll Detection**: Auto-scroll to find elements in long lists
-
-### Advanced Capabilities
-- **Toast Detection**: Capture system toast messages for verification
-- **Activity Monitoring**: Wait for specific Android activities
-- **Background Operations**: Async support for time-consuming operations
-
-## Use Cases
-
-Perfect for:
-
-- AI agents that need to interact with real devices
-- Remote device control setups
-- Automated QA tools
-- Android bot frameworks
-- UI testing and automation
-- Device management and monitoring
-
-## Installation
-
-### 1. Clone the repo
-
-```bash
+🛠️ 技术栈
+技术	用途
+Python 3.13+	核心开发语言
+MCP	AI Agent 与 Android 设备通信
+FastMCP	MCP Server 实现
+uiautomator2	Android UI 自动化
+ADB	Android 设备连接与管理
+uv	Python 环境和依赖管理
+📋 环境要求
+Python 3.13 或更高版本
+Android SDK Platform Tools
+ADB 已配置到系统 PATH
+Android 真机或兼容模拟器
+Android 设备已开启 USB 调试
+🚀 快速安装
+1. 克隆项目
+bash
 git clone https://github.com/nim444/mcp-android.git
+
 cd mcp-android
-```
 
-### 2. Create and activate virtual environment
+2. 创建虚拟环境
+bash
+uv venv --python 3.13
 
-```bash
-# Using uv (https://github.com/astral-sh/uv)
-uv venv
-source .venv/bin/activate  # On Windows: .venv\\Scripts\\activate
-```
 
-### 3. Install dependencies
+激活环境：
 
-```bash
+Windows：
+
+powershell
+.venv\Scripts\activate
+
+
+Linux / macOS：
+
+bash
+source .venv/bin/activate
+
+3. 安装依赖
+bash
 uv pip install
-```
 
-## Running the Server
+4. 检查 Android 设备
+bash
+adb devices
 
-The server supports two different transport modes depending on your use case:
+5. 初始化 uiautomator2
+bash
+python -m uiautomator2 init
 
-### Option 1: MCP stdio (For AI Agent Integration)
-
-This is the standard mode for integrating with AI agents like Claude Desktop, VS Code, or other MCP clients.
-
-```bash
-# Edit server.py to use stdio mode (default commented out)
-# Uncomment the stdio section and comment out http section
-
-# Then run:
-uv run python server.py
-```
-
-### Option 2: Streamable HTTP (For Web/API Integration)
-
-This mode runs the server as an HTTP API, useful for web applications, curl testing, or direct HTTP calls.
-
-```bash
-# Current default configuration - runs as HTTP server
+6. 启动 MCP Server
+bash
 uv run python server.py
 
-# Server will be available at: http://localhost:8080
-```
 
-### Switching Between Modes
+支持两种通信模式：
 
-Edit `server.py` and modify the `if __name__ == "__main__":` section:
+stdio：适用于 Claude Desktop、VS Code 等 MCP 客户端。
+Streamable HTTP：适用于 Web 应用和 HTTP 客户端。
 
-**For stdio mode (AI agents):**
-```python
-if __name__ == "__main__":
-    mcp.run(
-        transport="stdio",
-        show_banner=False,
-    )
-```
+具体启动配置以 server.py 为准。
 
-**For HTTP mode (Web API):**
-```python
-if __name__ == "__main__":
-    mcp.run(
-        transport="streamable-http",
-        host="0.0.0.0",
-        port=8080,
-    )
-```
+🤖 AI Agent 集成
 
-## Usage
+支持接入：
 
-### For AI Agent Integration (Claude Desktop, VS Code, etc.)
+Claude Desktop
+VS Code Agent
+GitHub Copilot Chat
+其他兼容 MCP 协议的 AI Agent
 
-An MCP client is needed to use this server. The Claude Desktop app is an example of an MCP client.
+配置完成后，可以直接通过自然语言执行 Android 自动化操作。
 
-**Important:** For AI agent integration, make sure to configure the server in **stdio mode** (see "Option 1" above).
+例如：
 
-To use this server with Claude Desktop:
+text
+获取当前 Android 设备信息。
 
-### Locate your Claude Desktop configuration file
+打开手机上的设置应用。
 
-- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
-- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+查看当前屏幕的 UI 元素。
 
-### Add the Android MCP server configuration to the mcpServers section
+点击 Wi-Fi 设置。
 
-```json
-{
-  "mcpServers": {
-    "mcp-android": {
-      "type": "stdio",
-      "command": "bash",
-      "args": [
-        "-c",
-        "cd /path/to/mcp-adb && source .venv/bin/activate && uv run python server.py"
-      ]
-    }
-  }
-}
-```
+获取当前屏幕截图。
 
-Replace `/path/to/mcp-adb` with the absolute path to where you cloned this repository. For example: `/Users/username/Projects/mcp-adb`
+🎯 应用场景
+Android 自动化测试
+AI 驱动的手机操作
+移动应用 UI 测试
+自动化 QA 测试
+Android 设备管理
+智能 Agent 与移动设备集成
+🔒 安全说明
+建议仅连接可信任的 Android 设备。
+HTTP 模式应配置适当的访问控制。
+不要将未授权的 ADB 或 MCP 服务暴露到公网。
+自动化操作前应确认设备和目标应用。
+📄 License
 
-### Using with VS Code
+本项目采用 MIT License 开源协议。
 
-You can also use this MCP server with VS Code's agent mode (requires VS Code 1.99 or newer). To set up:
-
-1. Create a `.vscode/mcp.json` file in your workspace:
-
-```json
-{
-  "servers": {
-    "mcp-android": {
-      "type": "stdio",
-      "command": "bash",
-      "args": [
-        "-c",
-        "cd /path/to/mcp-adb && source .venv/bin/activate && uv run python server.py"
-      ]
-    }
-  }
-}
-```
-
-Replace `/path/to/mcp-adb` with the absolute path to where you cloned this repository.
-
-After adding the configuration, you can manage the server using:
-
-- Command Palette → `MCP: List Servers` to view and manage configured servers
-- Command Palette → `MCP: Start Server` to start the server
-- The server's tools will be available in VS Code's agent mode chat
-
-![Vscode](.docs/mcp-vscode.png)
-
-### For HTTP API Integration (Direct API Calls)
-
-When running in HTTP mode (Option 2), you can interact with the server directly via HTTP requests:
-
-```bash
-# Check if server is running
-curl http://localhost:8080/
-
-# List available tools (you'll need to implement proper tool discovery endpoints)
-# This depends on your FastMCP version and configuration
-```
-
-**Use Cases for HTTP Mode:**
-- Web applications with Android automation
-- Testing tools that can't use stdio
-- Direct API integration with other services
-- Debugging and development with curl/Postman
-
-## UI Inspector
-
-The project includes support for uiauto.dev, a powerful UI inspection tool for viewing and analyzing your device's interface structure.
-
-1. Install the UI inspector:
-
-```bash
-uv pip install uiautodev
-```
-
-2. Start the inspector:
-
-```bash
-uiauto.dev
-```
-
-3. Open your browser and navigate to <https://uiauto.dev>
-
-![Ui](.docs/ui.png)
-
-## Available MCP Tools
-
-### Device Management Tools
-| Tool Name | Description |
-|-----------|-------------|
-| `mcp_health` | Check if the MCP server is running properly |
-| `get_device_status` | Get complete device status and readiness information |
-| `connect_device` | Connect to an Android device and get basic info |
-| `get_device_info` | Get detailed device info: serial, resolution, battery, etc. |
-| `check_adb_and_list_devices` | Check if ADB is installed and list connected devices |
-
-### Application Management Tools
-| Tool Name | Description |
-|-----------|-------------|
-| `get_installed_apps` | List all installed apps with version and package info |
-| `get_current_app` | Get info about the app currently in the foreground |
-| `start_app` | Start an app by its package name |
-| `stop_app` | Stop an app by its package name |
-| `stop_all_apps` | Stop all currently running apps |
-| `clear_app_data` | Clear user data/cache of a specified app |
-
-### Screen Control Tools
-| Tool Name | Description |
-|-----------|-------------|
-| `screen_on` | Turn on the screen |
-| `screen_off` | Turn off the screen |
-| `unlock_screen` | Unlock the screen (turn on and swipe if necessary) |
-| `wait_for_screen_on` | Wait asynchronously until the screen is turned on |
-
-### User Input Tools
-| Tool Name | Description |
-|-----------|-------------|
-| `press_key` | Simulate hardware key press (e.g. `home`, `back`, `menu`, etc.) |
-| `click` | Tap on an element by `text`, `resourceId`, or `description` |
-| `long_click` | Perform a long click on an element |
-| `send_text` | Input text into currently focused field (optionally clearing before) |
-| `swipe` | Swipe from one coordinate to another |
-| `drag` | Drag an element to a specific screen location |
-
-### Inspection Tools
-| Tool Name | Description |
-|-----------|-------------|
-| `get_element_info` | Get info on UI elements (text, bounds, clickable, etc.) |
-| `wait_for_element` | Wait for an element to appear on screen |
-| `scroll_to` | Scroll until a given element becomes visible |
-| `screenshot` | Take and save a screenshot from the device |
-| `dump_hierarchy` | Dump the UI hierarchy of the current screen as XML |
-
-### Advanced Tools
-| Tool Name | Description |
-|-----------|-------------|
-| `get_toast` | Get the last toast message shown on screen |
-| `wait_activity` | Wait until a specific activity appears |
-
----
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MCP Android Agent — Connect AI Agents with Android Devices.
